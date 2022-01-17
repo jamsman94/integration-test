@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	. "github.com/jamsman94/integration-test/ginkgo/pkg"
@@ -12,20 +12,20 @@ import (
 
 var host string
 
+var _ = BeforeSuite(func() {
+	// base test host here
+	host = "http://localhost:8081"
+	// get host from env if possible
+	env := os.Getenv("HOST")
+	if env != "" {
+		host = env
+	}
+
+	fmt.Println("Downstream Test Start")
+	fmt.Println("The host to be tested is:", host)
+})
+
 var _ = Describe("Downstream", func(){
-	BeforeSuite(func() {
-		// base test host here
-		host = "http://localhost:8081"
-		// get host from env if possible
-		env := os.Getenv("HOST")
-		if env != "" {
-			host = env
-		}
-
-		fmt.Println("Downstream Test Start")
-		fmt.Println("The host to be tested is:", host)
-	})
-
 	Context("Downstream Service API Test", func() {
 		It("Should Success when no request body is provided", func() {
 			request := &TestRequest{}
